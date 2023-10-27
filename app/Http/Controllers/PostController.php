@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class PostController extends Controller
@@ -33,7 +35,19 @@ class PostController extends Controller
      */
     public function store(StorePostRequest $request)
     {
-        
+        $post = $request->validated();
+
+        if ($request->hasFile('imagem_destaque')) {
+            $filePath = Storage::disk('public')
+            ->put('images/posts/featured-images', request()->file('imagem_destaque'));
+            $post['imagem_destaque'] = $filePath;
+        }
+
+        $create = Post::create($post);
+        if ($create) {          
+            return redirect()->route('post.index');
+        }
+        return abort(500);
     }
 
     /**
