@@ -81,18 +81,17 @@ class PostController extends Controller
         $post = Post::findOrFail($id);
         $validated = $request->validated();
 
-        if ($request->hasFile('featured_image')) {
+        if ($request->hasFile('imagem_destaque')) {
             // delete image
-            Storage::disk('public')->delete($post->featured_image);
+            Storage::disk('public')->delete($post->imagem_destaque);
 
-            $filePath = Storage::disk('public')->put('images/posts/featured-images', request()->file('featured_image'), 'public');
-            $validated['featured_image'] = $filePath;
+            $filePath = Storage::disk('public')->put('images/posts/featured-images', request()->file('imagem_destaque'), 'public');
+            $validated['imagem_destaque'] = $filePath;
         }
 
         $update = $post->update($validated);
 
         if ($update) {
-            session()->flash('notif.success', 'Post updated successfully!');
             return redirect()->route('posts.index');
         }
 
