@@ -53,26 +53,52 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Post $post)
+    public function show(string $id)
     {
-        //
+        return Inertia::render('Posts/Show', [
+            'post' => Post::findOrFail($id),
+        ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Post $post)
+    public function edit(string $id)
     {
         //
+        return Inertia::render(
+            'Posts/Edit',
+            [
+                'post' => Post::findOrFail($id),
+            ]
+        );
     }
-
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdatePostRequest $request, Post $post)
+    public function update(UpdatePostRequest $request, string $id)
     {
-        //
+        $post = Post::findOrFail($id);
+        $validated = $request->validated();
+
+        if ($request->hasFile('featured_image')) {
+            // delete image
+            Storage::disk('public')->delete($post->featured_image);
+
+            $filePath = Storage::disk('public')->put('images/posts/featured-images', request()->file('featured_image'), 'public');
+            $validated['featured_image'] = $filePath;
+        }
+
+        $update = $post->update($validated);
+
+        if ($update) {
+            session()->flash('notif.success', 'Post updated successfully!');
+            return redirect()->route('posts.index');
+        }
+
+        return abort(500);
     }
+
 
     /**
      * Remove the specified resource from storage.
