@@ -39,12 +39,12 @@ class PostController extends Controller
 
         if ($request->hasFile('imagem_destaque')) {
             $filePath = Storage::disk('public')
-            ->put('images/posts/featured-images', request()->file('imagem_destaque'));
+                ->put('images/posts/featured-images', request()->file('imagem_destaque'));
             $post['imagem_destaque'] = $filePath;
         }
 
         $create = Post::create($post);
-        if ($create) {          
+        if ($create) {
             return redirect()->route('post.index');
         }
         return abort(500);
@@ -85,7 +85,8 @@ class PostController extends Controller
             // delete image
             Storage::disk('public')->delete($post->imagem_destaque);
 
-            $filePath = Storage::disk('public')->put('images/posts/featured-images', request()->file('imagem_destaque'), 'public');
+            $filePath = Storage::disk('public')->put('images/posts/featured-images', 
+            request()->file('imagem_destaque'), 'public');
             $validated['imagem_destaque'] = $filePath;
         }
 
@@ -102,8 +103,18 @@ class PostController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Post $post)
+    public function destroy(string $id)
     {
-        //
+        $post = Post::findOrFail($id);
+
+        Storage::disk('public')->delete($post->featured_image);
+
+        $delete = $post->delete($id);
+
+        if ($delete) {
+            return redirect()->route('posts.index');
+        }
+
+        return abort(500);
     }
 }
