@@ -1,21 +1,46 @@
+import React from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head } from '@inertiajs/react';
-
+import InputError from '@/Components/InputError';
+import PrimaryButton from '@/Components/PrimaryButton';
+import InputLabel from '@/Components/InputLabel';
+import TextInput from '@/Components/TextInput';
+import { useForm, Head } from '@inertiajs/react';
 export default function Index({ auth }) {
-    return (
-        <AuthenticatedLayout
-            user={auth.user}
-            header={<h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Posts</h2>}
-        >
-            <Head title="Posts" />
+    const { data, setData, post, processing, reset, errors } = useForm({
+        titulo: '',
+        conteudo: '',
+        imagem_destaque: '',
+    });
 
-            <div className="py-12">
-                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                        <div className="p-6 text-gray-900 dark:text-gray-100">Posts</div>
-                    </div>
+    const submit = (e) => {
+        e.preventDefault();
+        post(route('chirps.store'), { onSuccess: () => reset() });
+    };
+    
+    return (
+        <AuthenticatedLayout user={auth.user}>
+            <Head title="Post" />
+            <form onSubmit={submit}>
+                <div>
+                    <InputLabel htmlFor="titulo" value="Titulo" />
+                    <TextInput
+                        id="titulo"
+                        name="titulo"
+                        value={data.titulo}
+                        className="mt-1 block w-full"
+                        autoComplete="titulo"
+                        isFocused={true}
+                        onChange={(e) => setData('titulo', e.target.value)}
+                        required
+                    />
+                    <InputError message={errors.titulo} className="mt-2" />
+                </div>  
+                <div className="flex items-center justify-end mt-4">       
+                    <PrimaryButton className="ml-4" disabled={processing}>
+                        Post
+                    </PrimaryButton>
                 </div>
-            </div>
+            </form>
         </AuthenticatedLayout>
     );
 }
