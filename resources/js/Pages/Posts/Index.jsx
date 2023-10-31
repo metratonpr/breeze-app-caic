@@ -36,21 +36,7 @@ export default function Index({ auth }) {
                             required
                         />
                         <InputError message={errors.titulo} className="mt-2" />
-                    </div>
-                    <div>
-                        <InputLabel htmlFor="conteudo" value="Conteudo" />
-                        <TextInput
-                            id="conteudo"
-                            name="conteudo"
-                            value={data.conteudo}
-                            className="mt-1 block w-full"
-                            autoComplete="conteudo"
-                            isFocused={true}
-                            onChange={(e) => setData('conteudo', e.target.value)}
-                            required
-                        />
-                        <InputError message={errors.conteudo} className="mt-2" />
-                    </div>
+                    </div>                    
                     <div>
                         <InputLabel htmlFor="conteudo" value="Conteudo" />
                         <TextAreaInput
@@ -65,6 +51,21 @@ export default function Index({ auth }) {
                         />
                         <InputError message={errors.conteudo} className="mt-2" />
                     </div>
+                    <div>
+                        <InputLabel htmlFor="imagem_destaque" value="Imagem" />
+                        <TextInput
+                             type="file"
+                            id="imagem_destaque"
+                            name="imagem_destaque"
+                            value={data.imagem_destaque}
+                            className="mt-1 block w-full"
+                            autoComplete="imagem_destaque"
+                            isFocused={true}
+                            onChange={(e) => setData('imagem_destaque', e.target.value)}
+                            required
+                        />
+                        <InputError message={errors.imagem_destaque} className="mt-2" />
+                    </div>    
                     <div className="flex items-center justify-end mt-4">
                         <PrimaryButton className="ml-4" disabled={processing}>
                             Post
