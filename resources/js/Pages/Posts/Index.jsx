@@ -54,7 +54,7 @@ export default function Index({ auth }) {
                     <div>
                         <InputLabel htmlFor="imagem_destaque" value="Imagem" />
                         <TextInput
-                             type="file"
+                            type="file"
                             id="imagem_destaque"
                             name="imagem_destaque"
                             value={data.imagem_destaque}
