@@ -20,7 +20,7 @@ class UpdatePostRequest extends FormRequest
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
     public function rules(): array
-    {
+    { 
         return [
             'titulo' => 'required|string|min:3|max:240',
             'conteudo' => 'required|string|min:3|max:6000',
