@@ -25,6 +25,10 @@ export default function Index({ auth, posts }) {
         });
     };
 
+    const editing =() =>{
+        console.log("Editar")
+    }
+
     const cancel = () => {
         if (window.confirm("Tem certeza de que deseja cancelar?")) {
             reset();
@@ -50,6 +54,26 @@ export default function Index({ auth, posts }) {
                     {posts.map((post) => (
                         <Post key={post.id} post={post} />
                     ))}
+
+                    {/* Edit Button */}
+                    {auth.user.id === post.user.id && (
+                                <button
+                                    onClick={() => {editing}}
+                                    className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded"
+                                >
+                                    Edit
+                                </button>
+                            )}
+
+                            {/* Remove Button */}
+                            {auth.user.id === post.user.id && (
+                                <button
+                                    onClick={() => remover }
+                                    className="mt-2 bg-red-500 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded"
+                                >
+                                    Remove
+                                </button>
+                            )}
                 </div>
             </div>
         </AuthenticatedLayout>
